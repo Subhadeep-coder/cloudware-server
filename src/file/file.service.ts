@@ -4,8 +4,8 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { S3Service } from 'src/s3/s3.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { S3Service } from '../s3/s3.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FavoriteFileDto } from './dto/favorite-file.dto';
 import { AuditAction, AuditEntity, FavoriteFile } from '@prisma/client';

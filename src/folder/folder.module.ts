@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { FolderService } from './folder.service';
 import { FolderController } from './folder.controller';
 import { PassportModule } from '@nestjs/passport';
-import { PrismaModule } from 'src/prisma/prisma.module';
-import { S3Module } from 'src/s3/s3.module';
+import { PrismaModule } from '../prisma/prisma.module';
+import { S3Module } from '../s3/s3.module';
 
 @Module({
   imports: [
