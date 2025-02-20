@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { JwtAuthGuard } from '@app/shared';
-import { GetUser } from '@app/common';
+import { JwtAuthGuard } from '../../../libs/shared/src';
+import { GetUser } from '../../../libs/common/src';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')

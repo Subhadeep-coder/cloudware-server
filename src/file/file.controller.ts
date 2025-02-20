@@ -8,8 +8,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FileService } from './file.service';
-import { GetUser } from '@app/common';
-import { JwtAuthGuard } from '@app/shared';
+import { GetUser } from '../../libs/common/src';
+import { JwtAuthGuard } from '../../libs/shared/src';
 
 @UseGuards(JwtAuthGuard)
 @Controller('file')

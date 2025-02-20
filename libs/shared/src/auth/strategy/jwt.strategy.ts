@@ -1,4 +1,4 @@
-import { JWTPayload } from '@app/common';
+import { JWTPayload } from '../../../../common/src';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';

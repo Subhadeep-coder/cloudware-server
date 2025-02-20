@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { OrganisationService } from './organisation.service';
 import { CreateOrganisationBodyDto } from './dto/create-organisation.dto';
-import { JwtAuthGuard } from '@app/shared';
-import { GetUser } from '@app/common';
+import { JwtAuthGuard } from '../../libs/shared/src';
+import { GetUser } from '../../libs/common/src';
 
 @UseGuards(JwtAuthGuard)
 @Controller('organisation')

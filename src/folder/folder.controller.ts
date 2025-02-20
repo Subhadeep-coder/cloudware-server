@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { FolderService } from './folder.service';
 import { CreateFolderBodyDto } from './dto/create-folder.dto';
-import { JwtAuthGuard } from '@app/shared';
-import { GetUser } from '@app/common';
+import { JwtAuthGuard } from '../../libs/shared/src';
+import { GetUser } from '../../libs/common/src';
 
 @UseGuards(JwtAuthGuard)
 @Controller('folder')

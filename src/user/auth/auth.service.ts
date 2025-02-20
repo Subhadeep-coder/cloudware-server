@@ -11,7 +11,7 @@ import {
   JWTPayload,
   verify,
   VerifyUserPayload,
-} from '@app/common';
+} from '../../../libs/common/src';
 import {
   GoogleLoginDto,
   LoginUserDto,
