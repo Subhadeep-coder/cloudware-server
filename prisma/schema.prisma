@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String  @unique
+  password     String?
+  profilePic   String?
+  isCompleted  Boolean @default(false)
+  storageUsed  BigInt  @default(0)
+  storageLimit BigInt  @default(16106127360)
+
+  organizations       Organization[]
+  organizationmembers OrganizationUser[]
+  folders             Folder[]
+  files               File[]
+  favoriteFiles       FavoriteFile[]
+  auditLogs           AuditLog[]
+
+  accounts Account?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Provider {
+  GOOGLE
+  FACEBOOK
+}
+
+model Account {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider   Provider
+  providerId String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([provider, providerId])
+}
+
+enum Role {
+  OWNER
+  MEMBER
+}
+
+model OrganizationUser {
+  id             String       @id @default(uuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           Role         @default(MEMBER)
+  joinedAt       DateTime     @default(now())
+
+  @@unique([userId, organizationId])
+}
+
+model Organization {
+  id             String             @id @default(uuid())
+  name           String
+  ownerId        String
+  owner          User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  members        OrganizationUser[]
+  invitationCode String             @unique
+
+  rootFolderId String @unique
+  rootFolder   Folder @relation("RootFolder", fields: [rootFolderId], references: [id], onDelete: Cascade)
+
+  files File[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Folder {
+  id             String   @id @default(uuid())
+  name           String
+  key            String
+  parentFolderId String?
+  parentFolder   Folder?  @relation("FolderToFolder", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  subfolders     Folder[] @relation("FolderToFolder")
+
+  rootOfOrganization Organization? @relation("RootFolder")
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  files     File[]
+  trashed   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id             String         @id @default(uuid())
+  name           String
+  url            String
+  size           BigInt
+  folderId       String
+  folder         Folder         @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  uploadedById   String
+  uploadedBy     User           @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  trashed        Boolean        @default(false)
+  favoriteFile   FavoriteFile[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model FavoriteFile {
+  id     String  @id @default(uuid())
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileId String
+  file   File    @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  pinned Boolean @default(false)
+
+  @@unique([userId, fileId])
+}
+
+enum AuditAction {
+  CREATE
+  DELETE
+  UPDATE
+}
+
+enum AuditEntity {
+  FOLDER
+  FILE
+}
+
+model AuditLog {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entityId  String
+  entity    AuditEntity
+  action    AuditAction
+  timestamp DateTime    @default(now())
+  details   String?
+}
