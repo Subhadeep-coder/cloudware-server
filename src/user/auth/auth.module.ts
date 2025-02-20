@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '@app/shared';
+import { JwtStrategy } from '../../../libs/shared/src';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'jwt' }), PrismaModule],
